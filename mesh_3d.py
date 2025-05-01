@@ -83,7 +83,7 @@ gmsh.option.setNumber("Mesh.Algorithm", 6)     # frontal-delaunay
 gmsh.option.setNumber("Mesh.Algorithm3D", 4)   # frontal
 # num_runs = 5
 # gmsh.option.setNumber("Mesh.Smoothing", num_runs)    # smoothing runs
-msf = 1
+msf = 3
 gmsh.option.setNumber("Mesh.MeshSizeFactor", 1 / 2**(msf - 1))
 # gmsh.option.setNumber("Mesh.SecondOrderLinear", 1)
 gmsh.model.mesh.generate(3)

@@ -16,7 +16,7 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{float}
 
-\title{CSC446 Project\thanks{\href{https://github.com/parth2324/csc2525-project}{Project Link}}}
+\title{CSC446 Project\thanks{\href{https://github.com/parth2324/3D_FEM/}{Project Code Link}}}
 \author{Parth Singh}
 
 \begin{document}
@@ -26,10 +26,10 @@
 
 For the course project, I will be implementing Finite Element Method in 3D, using isoparametric quadratic elements, 
 for the Laplacian PDE: $-\nabla^2u(\overrightarrow{x}) = 0$. I will be using quadratic tetrahedral Lagrange basis, and 
-also discuss mesh generation under \textit{gmsh} via two cases. I will be using Dirichlet Boundary Condition, based on
-the harmonic function $g(\overrightarrow{x}) = -log(||\overrightarrow{x} - (-7.1, -7.2, -7.3)||)$. \\
+also discuss mesh generation under \textit{gmsh}, exploring three case studies. I will further be using Dirichlet Boundary
+Condition, based on the harmonic function $g(\overrightarrow{x}) = -log(||\overrightarrow{x} - \langle -7.1, -7.2, -7.3 \rangle||)$. \\
 
-The cases are as follows:
+The case studies are as follows:
 
 \begin{enumerate}
     \item Radius 5 sphere centered at the origin (Figure \ref{fig:ex1}).
@@ -202,9 +202,9 @@ objects. We further generate meshes for MSFs from 1/2 to 1/8. Figures \ref{fig:g
 \end{figure}
 
 \textit{gmsh} also includes the ability to smooth corners, having an option which stores the number of mesh smoothening
-iterations. This can be particularly helpful when things misbehave around the boundary, such as a singularity at the apex
-of a sharp cone. Thus, for case 3, we test the effect of smoothening by comparing unsmoothened mesh based solution and 
-10 iterations worth of smoothening based mesh solution.
+iterations. This can be particularly helpful when things misbehave around the boundary, specifically edges that don't form
+90 degrees, causing singularities in solution. Thus, for case 3, given the apex of a sharp cone, we test the effect of 
+smoothening by comparing unsmoothened mesh based solution and 10 iterations worth of smoothening based mesh solution.
 
 \section{Results}
 
@@ -214,11 +214,19 @@ We calculate computed solution errors by:
     \varepsilon^h_u = \max_i \left| u_i^h - u(\mathbf{x}_i) \right|, \mathbf{x}_i \text{ node}.
 \]
 
-We couldn't compute solution for $MSF = 1/8$ in case 2, given the large volume of the cylinder implying large number of
-finite elements. In case 1, we reach numerical limits on computation as we reach $MSF=0.3$, performing worse than $MSF=0.5$;
-The effect of computational limits is reached faster due to the pure curved surface of the case, a sphere, since generating
-mesh for curvature is generally much harder. In case 3, we observe the benefits of smoothening, an improvement of 
-$\approx 10^{-5}$.
+Since $g$, the Dirichlet BC, is harmonic, $u = g$. Thus, we easily and quickly find max error using above formula.
+Below are observations for the different case studies:
+
+\begin{itemize}
+    \item In case 1, we reach numerical limits on computation as we reach $MSF=0.3$, performing worse than $MSF=0.5$;
+    The effect of computational limits is reached faster due to the pure curved surface of the case, a sphere, since generating
+    mesh for curvature is generally much harder.
+    \item We couldn't compute solution for $MSF = 1/8$ in case 2, given the large volume of the cylinder implying large number of
+    finite elements. We observe relatively slower improvements with finer mish otherwise, but not surprising given the majority
+    curved surface of the cylinder.
+    \item In case 3, we observe the benefits of smoothening, an improvement of $\approx 10^{-5}$. Note, we can potentially get
+    worse solution if we over-smoothen sharp edges which are not 90 degrees!
+\end{itemize}
 
 \begin{table}[h!]
     \centering
